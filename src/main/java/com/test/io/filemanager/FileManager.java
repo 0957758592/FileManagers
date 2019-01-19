@@ -11,7 +11,7 @@ public class FileManager {
         pathIsDirectory(directory);
 
         File[] files = directory.listFiles();
-        folderIsEmpty(files, directory);
+        pathIsFile(files, directory);
 
         int count = 0;
 
@@ -31,7 +31,7 @@ public class FileManager {
         pathIsDirectory(directory);
 
         File[] files = directory.listFiles();
-        folderIsEmpty(files, directory);
+        pathIsFile(files, directory);
 
         int count = 0;
 
@@ -56,16 +56,13 @@ public class FileManager {
             }
 
             File[] files = fileFrom.listFiles();
-            folderIsEmpty(files, fileFrom);
 
             for (File file : files) {
                 copy(from + "/" + file.getName(), to + "/" + file.getName());
             }
 
         } else {
-
             writeFile(fileFrom, fileTo);
-
         }
     }
 
@@ -118,9 +115,9 @@ public class FileManager {
         }
     }
 
-    private static void folderIsEmpty(File[] files, File filePath) {
+    private static void pathIsFile(File[] files, File filePath) {
         if (files == null) {
-            throw new NullPointerException("The path to " + filePath.getAbsolutePath() + " is Empty");
+            throw new NullPointerException("The path to " + filePath.getAbsolutePath() + " should be a Directory");
         }
     }
 
