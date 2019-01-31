@@ -37,10 +37,10 @@ class FileManager {
 
         for (File file : files) {
             if (file.isDirectory()) {
-                count++;
                 count += countDirs(file.getAbsolutePath());
             }
         }
+        count++;
         return count;
     }
 
@@ -56,7 +56,7 @@ class FileManager {
     }
 
     private static void moveOrCopy(String to, File pathFrom, boolean copy) throws IOException {
-        isPathExist(new File (to));
+        isPathExist(new File(to));
 
         if (pathFrom.isDirectory()) {
 
@@ -73,9 +73,9 @@ class FileManager {
 
     private static void recursiveMoveOrCopy(String to, File pathFrom, boolean copy) throws IOException {
         String substr = pathFrom.getParent().substring(pathFrom.getParent().lastIndexOf('\\'));
-        File pathTo = new File( to + "\\" + substr);
+        File pathTo = new File(to + "\\" + substr);
 
-        if (!pathTo.exists() ) {
+        if (!pathTo.exists()) {
             createDirectory(pathTo);
         }
 
@@ -126,12 +126,6 @@ class FileManager {
     private static void createDirectory(File filePath) throws IOException {
         if (!filePath.mkdirs()) {
             throw new IOException("Can't create directories in " + filePath.getAbsolutePath());
-        }
-    }
-
-    private static void createFile(File filePath) throws IOException {
-        if (!filePath.createNewFile()) {
-            throw new IOException("Can't create file in " + filePath.getAbsolutePath());
         }
     }
 

@@ -6,11 +6,11 @@ public class TestClass {
 
     public static void main(String[] args) throws IOException {
 
-        System.out.println(FileManager.countFiles("E:/JAVA_KATYA_EDUCATION/IO/filemanager/myTest"));
+        System.out.println("files "+ FileManager.countFiles("E:/JAVA_KATYA_EDUCATION/IO/filemanager/myTest"));
 //        System.out.println("=======crashFilePath=======");
 //        System.out.println(FileManager.countFiles("E:/JAVA_KATYA_EDUCATION/IO/filemanager/myTes"));
         System.out.println("==============");
-        System.out.println(FileManager.countDirs("E:/JAVA_KATYA_EDUCATION/IO/filemanager/myTest"));
+        System.out.println("Dirs "+FileManager.countDirs("E:/JAVA_KATYA_EDUCATION/IO/filemanager/myTest"));
 //        System.out.println("=======crashDirPath=======");
 //        System.out.println(FileManager.countDirs("E:/JAVA_KATYA_EDUCATION/IO/filemanager/myTes"));
         System.out.println("==============");

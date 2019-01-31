@@ -26,7 +26,7 @@ public class FileManagerTest {
     public void before() throws IOException {
 
         for (int i = 1; i <= INITIAL_CAPACITY; i++) {
-            tempFolder.newFolder("myTest2", "test" + i, "test");
+            tempFolder.newFolder("myTest2", "test" + i);
             tempFolder.newFile("myTest2//test" + i + "//test" + i + ".txt");
         }
     }
@@ -43,20 +43,20 @@ public class FileManagerTest {
 
     @Test
     public void countDirsTest() {
-        assertEquals(11, FileManager.countDirs(tempFolder.getRoot().getAbsolutePath()));
+        assertEquals(7, FileManager.countDirs(tempFolder.getRoot().getAbsolutePath()));
     }
 
     @Test
     public void copyTest() throws IOException {
-        FileManager.copy(tempFolder.getRoot().getAbsolutePath(), folderToCopy.getRoot().getPath());
+        FileManager.copy(tempFolder.getRoot().getAbsolutePath(), folderToCopy.getRoot().getAbsolutePath());
         assertEquals(5, FileManager.countFiles(folderToCopy.getRoot().getAbsolutePath()));
-        assertEquals(11, FileManager.countDirs(folderToCopy.getRoot().getAbsolutePath()));
+        assertEquals(8, FileManager.countDirs(folderToCopy.getRoot().getAbsolutePath()));
     }
 
     @Test
     public void moveTest() throws IOException {
         FileManager.move(tempFolder.getRoot().getPath(), folderToMove.getRoot().getPath());
-        assertEquals(11, FileManager.countDirs(folderToMove.getRoot().getAbsolutePath()));
+        assertEquals(8, FileManager.countDirs(folderToMove.getRoot().getAbsolutePath()));
         assertEquals(5, FileManager.countFiles(folderToMove.getRoot().getAbsolutePath()));
     }
 
