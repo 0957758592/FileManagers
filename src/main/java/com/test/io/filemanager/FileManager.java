@@ -3,7 +3,7 @@ package com.test.io.filemanager;
 import java.io.*;
 import java.nio.file.InvalidPathException;
 
-public class FileManager {
+class FileManager {
 
     static int countFiles(String path) {
         File directory = new File(path);
@@ -46,54 +46,56 @@ public class FileManager {
 
     static void copy(String from, String to) throws IOException {
         File fileFrom = new File(from);
-        File fileTo = new File(to);
-        isPathExist(fileFrom);
-
-        if (fileFrom.isDirectory()) {
-
-            if (!fileTo.exists()) {
-                createDirectory(fileTo);
-            }
-
-            File[] files = fileFrom.listFiles();
-
-            for (File file : files) {
-                copy(from + "/" + file.getName(), to + "/" + file.getName());
-            }
-
-        } else {
-            writeFile(fileFrom, fileTo);
-        }
+        moveOrCopy(to, fileFrom, true);
     }
 
     static void move(String from, String to) throws IOException {
         File pathFrom = new File(from);
-        File pathTo = new File(to);
-        isPathExist(pathFrom);
+        moveOrCopy(to, pathFrom, false);
+        deleteFile(pathFrom);
+    }
+
+    private static void moveOrCopy(String to, File pathFrom, boolean copy) throws IOException {
+        isPathExist(new File (to));
 
         if (pathFrom.isDirectory()) {
 
-            if (!pathTo.exists()) {
-                createDirectory(pathTo);
-            }
-
             File[] listFiles = pathFrom.listFiles();
+            pathIsFile(listFiles, pathFrom);
 
             for (File file : listFiles) {
-                move(pathFrom.getPath() + "/" + file.getName(), pathTo.getPath() + "/" + file.getName());
-                deleteFile(file);
+                recursiveMoveOrCopy(to, file, copy);
             }
-
         } else {
-            writeFile(pathFrom, pathTo);
+            writeFile(pathFrom, to);
         }
-
     }
 
-    private static void writeFile(File fileFrom, File fileTo) throws IOException {
+    private static void recursiveMoveOrCopy(String to, File pathFrom, boolean copy) throws IOException {
+        String substr = pathFrom.getParent().substring(pathFrom.getParent().lastIndexOf('\\'));
+        File pathTo = new File( to + "\\" + substr);
 
-        try (InputStream in = new FileInputStream(fileFrom);
+        if (!pathTo.exists() ) {
+            createDirectory(pathTo);
+        }
+
+        if (copy) {
+            copy(pathFrom.getAbsolutePath(), pathTo.getAbsolutePath());
+        } else {
+            move(pathFrom.getAbsolutePath(), pathTo.getAbsolutePath());
+        }
+    }
+
+    private static void writeFile(File fileFrom, String to) throws IOException {
+        File fileTo = new File(to);
+
+        if (fileTo.isDirectory()) {
+            fileTo = new File(to + "/" + fileFrom.getName());
+        }
+
+        try (InputStream in = new FileInputStream(fileFrom.getAbsolutePath());
              OutputStream out = new FileOutputStream(fileTo)) {
+
             byte[] buffer = new byte[2048];
             int length;
 
@@ -103,9 +105,9 @@ public class FileManager {
         }
     }
 
-    private static void isPathExist(File fileFrom) {
-        if (!fileFrom.exists()) {
-            throw new InvalidPathException(fileFrom.getName(), "The path '" + fileFrom.getAbsolutePath() + "' is not defined ");
+    private static void isPathExist(File path) {
+        if (!path.exists()) {
+            throw new InvalidPathException(path.getName(), "The path '" + path.getAbsolutePath() + "' is not defined ");
         }
     }
 
@@ -127,9 +129,16 @@ public class FileManager {
         }
     }
 
-    private static void deleteFile(File file) throws IOException {
-        if (!file.delete()) {
-            throw new IOException("Can't create directories");
+    private static void createFile(File filePath) throws IOException {
+        if (!filePath.createNewFile()) {
+            throw new IOException("Can't create file in " + filePath.getAbsolutePath());
         }
     }
+
+    private static void deleteFile(File file) throws IOException {
+        if (!file.delete()) {
+            throw new IOException("Can't delete directories");
+        }
+    }
+
 }
